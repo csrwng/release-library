@@ -6,6 +6,7 @@ def invokeProcess(Object ctx, Object args) {
 }
 
 def call(Object ctx, String path, Object... params) {
+  ctx.echo "apply template called"
   def args = ["-f", path]
   for (p in params) {
     args.add("-p")
@@ -13,7 +14,9 @@ def call(Object ctx, String path, Object... params) {
   }
 
   ctx.openshift.withCluster() {
+    ctx.echo "about to invoke process"
     def objects = invokeProcess(ctx, args)
+    ctx.echo "about to apply objects"
     ctx.openshift.apply(objects)
   }
 }
