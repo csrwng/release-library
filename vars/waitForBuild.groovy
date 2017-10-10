@@ -12,8 +12,7 @@ def call(Object ctx, String buildName, int timeOutSecs = 600) {
     if (buildObject == null) {
       ctx.error("build ${buildName} doesn't exist")
     }
-
-    echo "Waiting for build ${buildName} to finish"
+  
     ctx.timeout(time: timeOutSecs, unit: 'SECONDS') {
       build.watch {
         def phase = it.object().status.phase

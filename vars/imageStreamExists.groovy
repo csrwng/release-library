@@ -10,6 +10,5 @@ def call(Object ctx, String imageStreamName) {
       exists = false
     }
   }
-  echo "ImageStream ${imageStreamName} exists: ${exists}"
   return exists
 }
