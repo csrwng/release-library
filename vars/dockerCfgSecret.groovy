@@ -7,6 +7,7 @@ def call(Object ctx, String serviceAccountName) {
     try {
       sa = ctx.openshift.selector("sa", serviceAccountName).object()
     } catch (e) {
+      ctx.echo "Exception: ${e}"
       sa = null
     }
     if (sa == null) {

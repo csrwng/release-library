@@ -7,23 +7,11 @@ def call(Object ctx, String imageStreamName, String tag) {
     if (!imageStream.exists()) {
       ctx.error("image stream ${imageStreamName} does not exist")
     }
-    def tags = imageStream.object().status.tags
-    if (tags == null) {
-        ctx.error("image stream ${imageStreamName} does not have any tags")
-        return null
+    def obj = imageStream.object()
+    def repo = obj.status.dockerImageRepository
+    if (obj.status.publicDockerImageRepository) {
+      repo = obj.status.publicDockerImageRepository
     }
-    for (i = 0; i < tags.size(); i++) {
-        if (tags[i].tag == tag) {
-            if (tags[i].items.size() > 0) {
-                ref = tags[i].items[0].dockerImageReference
-                break
-            }
-        }
-    }
-  }
-  if (ref == null) {
-    ctx.error("image stream tag ${imageStreamName}:${tag} not found")
-  }
-  echo "Determined ImageStreamTag ${imageStreamName}:${tag} to refer to ${ref}"
-  return ref
+    ctx.echo "ImageStreamTag ${imageStreamName}:${tag} has repository ref ${repo}:${tag}"
+    return "${repo}:${tag}"
 }
